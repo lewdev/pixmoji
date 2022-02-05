@@ -1,0 +1,79 @@
+<!DOCTYPE html><html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+  <title>Pixmoji | Draw pixel art with emoji squares.</title>
+  <meta name="author" content="Lewis Nakao">
+  <meta name="description" content="Draw pixel art with emoji squares.">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="🎨 Pixmoji | Draw pixel art with emoji squares.">
+  <meta name="twitter:description" content="Draw pixel art with emoji squares.">
+  <meta name="twitter:site" content="@lewdev">
+  <meta name="twitter:creator" content="@lewdev">
+  <meta name="twitter:image" content="https://lewdev.github.io/apps/pixmoji/img/banner-1200x630.png">
+
+  <!-- Open Graph general (Facebook, Pinterest)-->
+  <meta property="og:title" content="🎨 Pixmoji | Draw pixel art with emoji squares.">
+  <meta property="og:description" content="Draw pixel art with emoji squares.">
+  <meta property="og:url" content="https://lewdev.github.io/apps/pixmoji/">
+  <meta property="og:site_name" content="lewdev.github.io">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://lewdev.github.io/apps/pixmoji/img/banner-1200x630.png">
+
+  <!-- Emoji SVG favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎨</text></svg>">
+
+  <!-- Offline -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Pixmoji">
+  <meta name="application-name" content="Pixmoji">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="msapplication-navbutton-color" content="#ffffff">
+  <meta name="msapplication-starturl" content="./index.html">
+
+  <style>
+  table{border-collapse:collapse;margin:1rem auto;cursor:pointer;}
+  td {width: 4vw}
+  *{padding:0;font-size:3vw;}
+  .container { width:50%; margin: 0 auto }
+  @media only screen and (max-width: 600px) {
+    *{font-size:4vw;}
+    .container { width:95%; margin: 0 auto }
+  }
+  @media only screen and (max-width: 1000px) {
+    *{font-size:5vw;}
+    .container { width:82%; margin: 0 auto }
+  }
+  button[disabled] { background-color: gray; border: 0 }
+  body {background-color: darkgray;}
+  h1 { font-family: Calibri, sans-serif; text-align:center }
+  .btn { width:100%;margin-top:1rem }
+  .links > a {
+    font-size:24px !important;
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+<div class=container>
+  <h1>Pixmoji</h1>
+  <div id=o></div>
+</div>
+<div class="links" style="position:absolute;right:0;top:0;">
+  <a href="https://github.com/lewdev/pixmoji" title="Source Code available on Github!">👨‍💻</a>
+  <a href="https://lewdev.github.io" title="Find more stuff by me">
+    <img src="https://lewdev.github.io/site/favicon/favicon-32x32.png"/>
+  </a>
+</div>
+<script src=script.min.js></script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-2833478-13"></script>
+<script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());gtag('config', 'UA-2833478-13');</script>
+</body></html>

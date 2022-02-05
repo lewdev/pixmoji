@@ -1,0 +1,11 @@
+{
+  "name": "pixmoji",
+  "version": "1.0.0",
+  "description": "Draw pixel art with emoji squares.",
+  "scripts": {
+    "preinstall": "npm i serve concurrently opener -g",
+    "start": "concurrently \"serve src -p 3031\" \"opener http://localhost:3031\""
+  },
+  "author": "Lewis Nakao <lewdev@gmail.com>",
+  "license": "UNLICENSED"
+}
