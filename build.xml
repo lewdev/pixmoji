@@ -34,18 +34,18 @@
   <target name="compile-index">
     <exec dir="." executable="cmd" >
       <arg line="/c html-minifier"/>
-      <arg line="--remove-comments --collapse-inline-tag-whitespace --remove-tag-whitespace --remove-script-type-attributes "/>
+      <arg line="--remove-comments --minify-css true --collapse-inline-tag-whitespace --remove-tag-whitespace --remove-script-type-attributes "/>
       <arg line="--use-short-doctype --conservative-collapse --collapse-whitespace --remove-tag-whitespace --decode-entities "/>
       <arg line="-o ./public/index.html"/>
       <arg line="./src/index.html"/>
     </exec>
-    <exec dir="." executable="cmd" >
+    <!-- <exec dir="." executable="cmd" >
       <arg line="/c cleancss ./src/style.css ./src/assets/css-modal.css ./src/assets/bootstrap.min.css -o ./public/style.css"/>
-    </exec>
+    </exec> -->
     <exec dir="." executable="cmd" >
       <arg line="/c npx google-closure-compiler"/>
       <arg line="--charset UTF-8"/>
-      <arg line="--compilation_level ADVANCED_OPTIMIZATIONS"/>
+      <!-- <arg line="- -compilation_level ADVANCED_OPTIMIZATIONS"/> -->
       <!--<arg line="- -js ./src/assets/emojis.js"/>-->
       <arg line="--js ./src/script.js"/>
       <arg line="--js_output_file ./public/script.js"/>
@@ -57,7 +57,7 @@
     <delete dir="../lewdev.github.io/apps/${ant.project.name}"/>
     <mkdir dir="../lewdev.github.io/apps/${ant.project.name}" />
     <copy todir="../lewdev.github.io/apps/${ant.project.name}">
-      <fileset dir="./src"/>
+      <fileset dir="./public"/>
     </copy>
   </target>
 
