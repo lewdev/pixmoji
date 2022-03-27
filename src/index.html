@@ -38,44 +38,57 @@
   <meta name="msapplication-starturl" content="./index.html">
 
   <style>
-  table{border-collapse:collapse;margin:1rem auto;cursor:pointer;}
-  /* td {width: 4vw} */
-  *{padding:0;font-size:3vw;}
-  .container { width:50%; margin: 0 auto }/* 1000px or more */
-    table.sm > tbody > tr > td { font-size:2vw; }
-  @media only screen and (max-width: 600px) {/* 600px or less */
-    *{font-size:4vw;}
-    table.sm > tbody > tr > td { font-size:2vw; }
-    .container { margin: 0 auto }
+  a { text-decoration:none; margin-left: .5rem; }
+  table {
+    border-collapse:collapse;
+    margin:1rem auto;
+    cursor:pointer;
   }
-  @media only screen and (max-width: 1000px) {/* 1000px or less */
-    *{font-size:5vw;}
-    table.sm > tbody > tr > td { font-size:3.5vw; }
-    .container { width:85%; margin: 0 auto }
+  * {padding:0; font-size:3vw;}
+  .container { width: 72%; margin: 0 auto }
+  /*
+    max-width is that value and lower
+    min-width is that value and higher
+  */
+  @media only screen and (max-width: 800px) {
+    *{font-size:5.3vw;}
+    .container { width: 95% }
+  }
+  @media only screen and (min-width: 800px) {
+    *{font-size: 30px;}
+    .container { width: 700px }
   }
   button[disabled] { background-color: gray; border: 0 }
   body {background-color: darkgray;font-family: Calibri, sans-serif; }
   h1 { text-align:center; }
-  .btn-row { margin-bottom: 1rem; }
-  .colors { margin-left: 10%;}
-  .btn { width:100%;margin-top:1rem }
-  .btn2 { width:50%; }
+  .row {
+    width: 14.3rem;
+    text-align:center;
+    margin-bottom: 1rem;
+    white-space: nowrap;
+    margin: .5rem auto;
+  }
+  .btn { width:50%; }
   .links > a {
     font-size:24px !important;
     text-decoration: none;
   }
 </style>
+<style id=s></style>
 </head>
 <body>
 <div class=container>
-  <h1>Pixmoji</h1>
+  <h1>
+    🎨 Pixmoji
+    <a href="https://github.com/lewdev/pixmoji" title="Source Code available on Github!">👨‍💻</a>
+    <a href="https://lewdev.github.io" title="Find more stuff by me">
+      <img src="https://lewdev.github.io/site/favicon/favicon-32x32.png" style="width:1rem"/>
+    </a>
+  </h1>
   <div id=o></div>
-</div>
-<div class="links" style="position:absolute;right:0;top:0;">
-  <a href="https://github.com/lewdev/pixmoji" title="Source Code available on Github!">👨‍💻</a>
-  <a href="https://lewdev.github.io" title="Find more stuff by me">
-    <img src="https://lewdev.github.io/site/favicon/favicon-32x32.png"/>
-  </a>
+  <div style="margin: 3rem 0 5rem 0;text-align: center;">
+    <a href="https://twitter.com/lewdev" target="_blank">🐦 Follow me</a>
+  </div>
 </div>
 <script src=script.js></script>
 

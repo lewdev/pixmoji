@@ -34,8 +34,8 @@
   <target name="compile-index">
     <exec dir="." executable="cmd" >
       <arg line="/c html-minifier"/>
-      <arg line="--remove-comments --minify-css true --collapse-inline-tag-whitespace --remove-tag-whitespace --remove-script-type-attributes "/>
-      <arg line="--use-short-doctype --conservative-collapse --collapse-whitespace --remove-tag-whitespace --decode-entities "/>
+      <arg line="--remove-comments --minify-css true --collapse-inline-tag-whitespace --remove-script-type-attributes "/>
+      <arg line="--use-short-doctype --collapse-whitespace --decode-entities "/>
       <arg line="-o ./public/index.html"/>
       <arg line="./src/index.html"/>
     </exec>
@@ -45,8 +45,7 @@
     <exec dir="." executable="cmd" >
       <arg line="/c npx google-closure-compiler"/>
       <arg line="--charset UTF-8"/>
-      <!-- <arg line="- -compilation_level ADVANCED_OPTIMIZATIONS"/> -->
-      <!--<arg line="- -js ./src/assets/emojis.js"/>-->
+      <arg line="--compilation_level ADVANCED_OPTIMIZATIONS"/> <!-- WHITESPACE_ONLY, SIMPLE_OPTIMIZATIONS, ADVANCED_OPTIMIZATIONS -->
       <arg line="--js ./src/script.js"/>
       <arg line="--js_output_file ./public/script.js"/>
     </exec>

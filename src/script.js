@@ -1,90 +1,152 @@
-let d=document,
-o=document.getElementById('o'),
-c="⬛⬜🟥🟦🟨🟩🟧🟪🟫".split(/.*?/u), //square emojis
-s=c[0], //selected color
-g=[],   //the grid
-MAX_S=16,
-MIN_S=5,
-S=9,
-BRUSH=1,
-FILL=2,
-T=BRUSH,
 
-//create new array and fill it
-a=(n,m)=>new Array(n).fill(m);
+const APP_ID = "pixmoji", w = window;
+w[APP_ID] = (() => {
+  const d = document,
+    o = document.getElementById('o'),
+    s = document.getElementById('s'),
+    palette = "⬛⬜🟥🟦🟨🟩🟧🟪🟫".split(/.*?/u), //square emojis
+    BRUSH = 0,
+    FILL = 1,
+    TOOLS = ['🖌️', '🪣']
+  ;
+  let grid = [], //the grid
+    // history = [],
+    // gallery = [],
+    // count = 0, time = 0;
+    width = 8,
+    height = 8,
+    selectedTool = BRUSH,
+    color = [palette[0], palette[1]] //[brushColor, fillColor]
+  ;
 
-//initialize grid and render it
-n=_=>{g=a(S).map(_=>a(S,s));r()};
+  const SIZE = { MIN: 5, MAX: 16, SM: 11 };
+    //create new array and fill it
+  const arrAndFill = (size, fill = 0) => new Array(size).fill(fill);
 
-//select color
-l=p=>{s=p;r()};
+    //initialize grid and render it
+  const init = () => { grid = arrAndFill(height).map(_ => arrAndFill(width, color[FILL])); render(); },
 
-//toggle brush/fill
-k=_=>{T=T==BRUSH?FILL:BRUSH;r()}
+    wrapRow = row => `<div class=row>${row}</div>`,
 
-w=(i,j, startColor) => {
-  if (i >= 0 && i < S && j >= 0 && j < S && g[i][j] !== s) {
-    if (T === BRUSH) {
-      g[i][j] = s;
-    }
-    else {
-      if (!startColor) startColor = g[i][j];
-      if (g[i][j] === startColor) {
-        g[i][j] = s;
-        w(i - 1, j, startColor);
-        w(i, j - 1, startColor);
-        w(i + 1, j, startColor);
-        w(i, j + 1, startColor);
+    renderBtn = (text, onclick, disabled = 0, hasBtnClass = 0) => (
+      `<button onclick=${APP_ID}.${onclick}${disabled ? ' disabled' : ''}${hasBtnClass ? ` class=btn` : ''}>${text}</button>`
+    )
+  ;
+
+  const renderTool = (emoji, tool) => {
+      const disabled = selectedTool == tool ? ' disabled' : '';
+      return wrapRow(
+        renderBtn(emoji, `selectTool(${tool})`, disabled)
+        + palette.map(a => renderBtn(a, `selectColor('${a}',${tool})`, color[tool] == a)).join("")
+      );
+    },
+
+    renderResizeBtn = (add, isWidth) => {
+      const isAdd = add > 0;
+      const size = isWidth ? width : height;
+      const disabled = isAdd ? size === SIZE.MAX : size === SIZE.MIN;
+      const emoji = isAdd ? '➕' : '➖';
+      const direction = isWidth ? '↔️' : '↕️';
+      return renderBtn(emoji + direction, `resize(${add},${isWidth})`, disabled, true);
+    },
+
+    renderGrid = () => {
+      return wrapRow(
+        [`<table class="${width >= SIZE.SM ? 'sm-' + width :''}">`,
+        grid.map((a, i) => `<tr>${a.map((b,j) => `<td onclick="${APP_ID}.draw(${i},${j})">${b}</td>`).join("")}</tr>`).join(""),
+        "</table>"].join("")
+      );
+    },
+
+    draw = (i, j, startColor = 0) => {
+      if (i < 0 || i >= height || j < 0 || j >= width) return;
+      const cell = grid[i][j];
+      if (selectedTool === BRUSH) {
+        grid[i][j] = color[BRUSH] === cell ? color[FILL] : color[BRUSH];
       }
-    }
-    r();
-  }
-};
+      else if (color[FILL] !== cell) {
+        if (!startColor) startColor = cell;
+        if (cell === startColor) {
+          grid[i][j] = color[FILL];
+          draw(i - 1, j, startColor);
+          draw(i + 1, j, startColor);
+          draw(i, j - 1, startColor);
+          draw(i, j + 1, startColor);
+        }
+      }
+      render();
+    },
 
-//increase/decrease grid size
-z=c=>{
-  if ((c < 0 && S <= MIN_S) || (c > 0 && S >= MAX_S)) return;
-  S += c;
-  isOdd = S % 2 === 1;
-  if (c < 0) {//reducing size
-    index = isOdd ? 0 : 1;
-    g = g.splice(index, S).map(r => r.splice(index, S));
-  }
-  else {//increase size
-    g.forEach(r => isOdd ? r.push(s) : r.unshift(s));
-    if (isOdd) g.push(a(S,s));
-    else g.unshift(a(S,s));
-  }
-  r();
-};
+    render = () => o.innerHTML = [
+      TOOLS.map(renderTool).join(""),
+      renderGrid(),
+      //wrapRow([['undo','↩️ Undo'],['redo','↪️ Redo']].map(btn => renderBtn(btn[1], `${btn[0]}()`, 0, 1)).join("")),
+      wrapRow([['copyGrid','📋 Copy'],['reset','🔃 Reset']].map(btn => renderBtn(btn[1], `${btn[0]}()`, 0, 1)).join("")),
+      // wrapRow([['save','💾 Save'],['viewGallery','🖼️ Gallery']].map(btn => renderBtn(btn[1], `${btn[0]}()`, 0, 1)).join("")),
+      wrapRow(`${width} x ${height}`),
+      wrapRow([1, -1].map(a => renderResizeBtn(a, 1)).join("")),
+      wrapRow([1, -1].map(a => renderResizeBtn(a, 0)).join("")),
+    ].join("")
+  ;
 
-//copy grid text
-y=_=>{
-  t=d.createElement('textarea');
-  d.body.appendChild(t);
-  t.value=g.map(a=>a.join('')).join("\n");
-  t.select();
-  d.execCommand("copy");
-  t.remove();
-};
+  //initialize
+  
+  d.addEventListener("resize", render);
+  init();
 
-//render
-r=_=>o.innerHTML=`<div class="btn-row">
-<button onclick="k()" class=btn2${T==BRUSH?' disabled':''}>🖌️
-</button><button onclick="k()" class=btn2${T==FILL?' disabled':''}>🪣</button>
-</div>
-<div class="btn-row colors">
-${c.map(a=>`<button onclick=s='${a}';r()${s==a?' disabled':''}>${a}</button>`).join("")}</div>
-</div>
-<table class="${S > 12 ? 'sm':''}">
-${g.map((a,i)=>`<tr>${a.map((b,j)=>`<td onclick="w(${i},${j})">${b}</td>`).join("")}</tr>`).join("")}</table>
-<div style=text-align:center>${S}x${S}</div>
-<div>
-<button onclick="z(1)"class=btn2${S==MAX_S?' disabled':''}>➕</button><button onclick="z(-1)"class=btn2${S==MIN_S?' disabled':''}>➖</button></div>
-${[['y','📋 Copy'],['n','🔃 Reset']].map(z=>`<button onclick="${z[0]}()"class=btn>${z[1]}</button>`).join("")}`;
+  return {
+    "copyGrid": () => navigator.clipboard.writeText(grid.map(a=>a.join('')).join("\n") + ` #${APP_ID}`),
 
+    "reset": () => confirm(`Are you sure you want to clear the grid with ${color[FILL]}?`) && init(),
 
-//initialize
-n();
-s=c[5];
-r();
+    "selectColor": (selectedColor, tool) => { color[tool] = selectedColor; render(); },
+
+    "selectTool": tool => { selectedTool = tool; render(); },
+
+    "draw": draw,
+
+    "resize": (addSize, isWidth) => { //increase/decrease grid size
+      const { MIN, MAX } = SIZE;
+      if (isWidth) {
+        if ((addSize < 0 && width <= MIN) || (addSize > 0 && width >= MAX)) return;
+        width += addSize;
+      }
+      else {
+        if ((addSize < 0 && height <= MIN) || (addSize > 0 && height >= MAX)) return;
+        height += addSize;
+      }
+      // this allows the reverse to happen when increase/decreasing
+      const isReducing = addSize < 0 ? 0 : 1;
+      const size = isWidth ? width : height;
+      const alternate = size % 2 === isReducing;
+      if (addSize < 0) {//reducing size
+        const index = alternate ? 0 : 1;
+        if (isWidth) {
+          grid = grid.map(r => r.splice(index, width));
+        }
+        else {
+          grid = grid.splice(index, height);
+        }
+      }
+      else {//increase size
+        const method = alternate ? "push" : "unshift";
+        if (isWidth) {
+          grid.forEach(r => alternate ? r[method](color[FILL]) : r[method](color[FILL]));
+        }
+        else {
+          grid[method](arrAndFill(width, color[FILL]));
+        }
+      }
+      //resize font based on width of grid and screen
+      let fontSize;
+      if (w.innerWidth > 800) {//see CSS for media 800px conditions
+        fontSize = 30 - ((width - 10) * 2) + "px";
+      }
+      else {
+        fontSize = (Math.floor((5.3 - ((width - 10) * .3)) * 10) / 10) + "vw";
+      }
+      s.innerHTML = `table > tbody > tr > td { font-size: ${fontSize}; }`;
+      render();
+    },
+  };
+})();
